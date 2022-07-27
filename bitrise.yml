@@ -968,7 +968,7 @@ workflows:
     - script@1:
         title: Stack REV ID
         inputs:
-        - content: |
+        - content: |-
             #!/usr/bin/env bash
             # fail if any commands fails
             set -e
@@ -1066,41 +1066,6 @@ workflows:
         - content: |
             #!/usr/bin/env bash
             set -ex
-
-            mkdir tmp
-
-            sudo mount -t tmpfs -o size=20g tmpfs "$BITRISE_SOURCE_DIR/tmp"
-
-            cd tmp
-
-            CPUS=$(sysctl -n hw.ncpu)
-            #$(sysctl -n hw.ncpu)
-
-            sysbench fileio prepare
-
-            #sequential write
-            sysbench --file-test-mode=seqwr fileio run --num-threads=$CPUS
-
-            #sequential rewrite
-            #sysbench --file-test-mode=seqrewr fileio run --num-threads=$CPUS
-
-            #sequential read
-            #sysbench --file-test-mode=seqrd fileio run --num-threads=$CPUS
-
-            #random read
-            #sysbench --file-test-mode=rndrd fileio run --num-threads=$CPUS
-
-            #random write
-            #sysbench --file-test-mode=rndwr fileio run --num-threads=$CPUS
-
-            #combined random read/write
-            #sysbench --file-test-mode=rndrw fileio run --num-threads=$CPUS
-        title: Fileio RamDisk
-    - script@1:
-        inputs:
-        - content: |
-            #!/usr/bin/env bash
-            set -ex
             #sleep 60
             #curl https://app.bitrise.io/app/be4f311371d0d5db/build/start.json --data "{\"hook_info\":{\"type\":\"bitrise\",\"build_trigger_token\":\"299g7YmEYN1mRmBFUIFqrg\"},\"build_params\":{\"branch\":\"master\",\"workflow_id\":\"$BITRISE_TRIGGERED_WORKFLOW_ID\",\"worker\":{\"use_bitrise_den_staging\":true}},\"triggered_by\":\"curl\"}"
         title: Start Another Build
@@ -1191,56 +1156,21 @@ workflows:
             sysbench --file-test-mode=seqwr fileio run --num-threads=$CPUS
 
             #sequential rewrite
-            sysbench --file-test-mode=seqrewr fileio run --num-threads=$CPUS
+            #sysbench --file-test-mode=seqrewr fileio run --num-threads=$CPUS
 
             #sequential read
-            sysbench --file-test-mode=seqrd fileio run --num-threads=$CPUS
+            #sysbench --file-test-mode=seqrd fileio run --num-threads=$CPUS
 
             #random read
-            sysbench --file-test-mode=rndrd fileio run --num-threads=$CPUS
+            #sysbench --file-test-mode=rndrd fileio run --num-threads=$CPUS
 
             #random write
-            sysbench --file-test-mode=rndwr fileio run --num-threads=$CPUS
+            #sysbench --file-test-mode=rndwr fileio run --num-threads=$CPUS
 
             #combined random read/write
-            sysbench --file-test-mode=rndrw fileio run --num-threads=$CPUS
+            #sysbench --file-test-mode=rndrw fileio run --num-threads=$CPUS
         title: fileio
         is_always_run: true
-    - script@1:
-        inputs:
-        - content: |
-            #!/usr/bin/env bash
-            set -ex
-
-            mkdir tmp
-
-            sudo mount -t ramfs -o size=20g ramfs "$BITRISE_SOURCE_DIR/tmp"
-
-            cd tmp
-
-            CPUS=$(grep -c processor /proc/cpuinfo)
-            #$(sysctl -n hw.ncpu)
-
-            sysbench fileio prepare
-
-            #sequential write
-            sysbench --file-test-mode=seqwr fileio run --num-threads=$CPUS
-
-            #sequential rewrite
-            sysbench --file-test-mode=seqrewr fileio run --num-threads=$CPUS
-
-            #sequential read
-            sysbench --file-test-mode=seqrd fileio run --num-threads=$CPUS
-
-            #random read
-            sysbench --file-test-mode=rndrd fileio run --num-threads=$CPUS
-
-            #random write
-            sysbench --file-test-mode=rndwr fileio run --num-threads=$CPUS
-
-            #combined random read/write
-            sysbench --file-test-mode=rndrw fileio run --num-threads=$CPUS
-        title: fileio RAMDISK
     - script@1:
         inputs:
         - content: |
@@ -1250,92 +1180,6 @@ workflows:
             #curl https://app.bitrise.io/app/be4f311371d0d5db/build/start.json --data "{\"hook_info\":{\"type\":\"bitrise\",\"build_trigger_token\":\"299g7YmEYN1mRmBFUIFqrg\"},\"build_params\":{\"branch\":\"master\",\"workflow_id\":\"$BITRISE_TRIGGERED_WORKFLOW_ID\",\"worker\":{\"use_bitrise_den_staging\":true}},\"triggered_by\":\"curl\"}"
         title: Start Another Build
         is_always_run: true
-    meta:
-      bitrise.io:
-        stack: linux-docker-android-20.04
-        machine_type_id: elite-xl
-  ram_disk:
-    steps:
-    - script@1:
-        inputs:
-        - content: |
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
-            set -o pipefail
-            # debug log
-            set -x
-
-            # macos
-            ramfs_size_mb=10000
-            mount_point="$BITRISE_SOURCE_DIR"
-
-            ramfs_size_sectors=$((${ramfs_size_mb}*1024*1024/512))
-            ramdisk_dev=`hdid -nomount ram://${ramfs_size_sectors}`
-
-            newfs_hfs -v 'ram disk' ${ramdisk_dev}
-            mount -o noatime -t hfs ${ramdisk_dev} ${mount_point}
-
-            git clone https://github.com/kubernetes/kubernetes.git
-    meta:
-      bitrise.io:
-        stack: osx-xcode-14.0.x
-        machine_type_id: g2.12core
-  ran_disk_linux:
-    steps:
-    - script@1:
-        inputs:
-        - content: |
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
-            set -o pipefail
-            # debug log
-            set -x
-
-            mkdir kubernetes
-
-            sudo mount -t tmpfs -o size=10g tmpfs "$BITRISE_SOURCE_DIR/kubernetes"
-
-            git clone https://github.com/kubernetes/kubernetes.git
-    meta:
-      bitrise.io:
-        stack: linux-docker-android-20.04
-        machine_type_id: elite-xl
-  ssd:
-    steps:
-    - script@1:
-        inputs:
-        - content: |
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
-            set -o pipefail
-            # debug log
-            set -x
-
-            git clone https://github.com/kubernetes/kubernetes.git
-    meta:
-      bitrise.io:
-        stack: osx-xcode-14.0.x
-        machine_type_id: g2.12core
-  ssd_linux:
-    steps:
-    - script@1:
-        inputs:
-        - content: |
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
-            set -o pipefail
-            # debug log
-            set -x
-
-            git clone https://github.com/kubernetes/kubernetes.git
     meta:
       bitrise.io:
         stack: linux-docker-android-20.04
@@ -1401,3 +1245,4 @@ meta:
   bitrise.io:
     machine_type_id: standard
     stack: osx-xcode-12.4.x
+
