@@ -2,42 +2,53 @@
 format_version: '11'
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: other
+meta:
+  bitrise.io:
+    stack: linux-docker-android-20.04
+    machine_type_id: standard
 workflows:
   10core_max:
+    before_run:
+    - primary
     meta:
       bitrise.io:
-        stack: osx-xcode-14.0.x
         machine_type_id: g2-m1-max.10core
+        stack: osx-xcode-14.0.x
+  12core_intel:
     before_run:
     - primary
+    meta:
+      bitrise.io:
+        machine_type_id: g2.12core
+        stack: osx-xcode-14.0.x
   4core_intel:
+    before_run:
+    - primary
     meta:
       bitrise.io:
-        stack: osx-xcode-14.0.x
         machine_type_id: g2.4core
-    before_run:
-    - primary
+        stack: osx-xcode-14.0.x
   4core_m1:
+    before_run:
+    - primary
     meta:
       bitrise.io:
-        stack: osx-xcode-14.0.x
         machine_type_id: g2-m1.4core
-    before_run:
-    - primary
+        stack: osx-xcode-14.0.x
   8core_intel:
+    before_run:
+    - primary
     meta:
       bitrise.io:
-        stack: osx-xcode-14.0.x
         machine_type_id: g2.8core
+        stack: osx-xcode-14.0.x
+  8core_m1:
     before_run:
     - primary
-  8core_m1:
     meta:
       bitrise.io:
-        stack: osx-xcode-14.0.x
         machine_type_id: g2-m1.8core
-    before_run:
-    - primary
+        stack: osx-xcode-14.0.x
   primary:
     steps:
     - script@1:
@@ -62,14 +73,24 @@ workflows:
         title: BenchLogic
         inputs:
         - content: bash linux_bench.sh
-  12core_intel:
-    meta:
-      bitrise.io:
-        stack: osx-xcode-14.0.x
-        machine_type_id: g2.12core
+  4core_c2linux:
     before_run:
     - primary
-meta:
-  bitrise.io:
-    stack: osx-xcode-14.0.x
-    machine_type_id: g2-m1-max.5core
+    meta:
+      bitrise.io:
+        machine_type_id: c2-standard-4
+        stack: linux-docker-android-20.04
+  8core_c2linux:
+    before_run:
+    - primary
+    meta:
+      bitrise.io:
+        machine_type_id: c2-standard-8
+        stack: linux-docker-android-20.04
+  16core_c2linux:
+    before_run:
+    - primary
+    meta:
+      bitrise.io:
+        stack: linux-docker-android-20.04
+        machine_type_id: c2-standard-16
