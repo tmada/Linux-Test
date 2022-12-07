@@ -112,7 +112,6 @@ workflows:
         title: BenchLogic
         inputs:
         - content: bash linux_bench.sh
-        is_always_run: true
 app:
   envs:
   - opts:
