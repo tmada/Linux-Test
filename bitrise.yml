@@ -1,6 +1,6 @@
 ---
 format_version: '11'
-default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+default_step_lib_source: 'https://github.com/bitrise-io/bitrise-steplib.git'
 project_type: other
 meta:
   bitrise.io:
@@ -21,6 +21,20 @@ workflows:
       bitrise.io:
         machine_type_id: g2.12core
         stack: osx-xcode-14.0.x
+  16core_c2linux:
+    before_run:
+    - primary
+    meta:
+      bitrise.io:
+        stack: linux-docker-android-20.04
+        machine_type_id: elite-xl
+  4core_c2linux:
+    before_run:
+    - primary
+    meta:
+      bitrise.io:
+        machine_type_id: standard
+        stack: linux-docker-android-20.04
   4core_intel:
     before_run:
     - primary
@@ -35,6 +49,13 @@ workflows:
       bitrise.io:
         machine_type_id: g2-m1.4core
         stack: osx-xcode-14.0.x
+  8core_c2linux:
+    before_run:
+    - primary
+    meta:
+      bitrise.io:
+        machine_type_id: elite
+        stack: linux-docker-android-20.04
   8core_intel:
     before_run:
     - primary
@@ -51,46 +72,46 @@ workflows:
         stack: osx-xcode-14.0.x
   primary:
     steps:
+    - activate-ssh-key@4: {}
+    - git-clone@6: {}
     - script@1:
         title: Host Info
         inputs:
-        - content: |-
+        - content: >-
             #!/usr/bin/env bash
+
             # fail if any commands fails
+
             set -e
-            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+
+            # make pipelines' return status equal the last command to exit with
+            a non-zero status, or zero if all commands exit successfully
+
             set -o pipefail
 
+
             # write your script here
+
             date
+
             hostname
+
             sw_vers
+
             sysctl -n machdep.cpu.brand_string
+
             sysctl hw.ncpu
+
             xcodebuild -version
+
             echo "=="
     - script@1:
         title: BenchLogic
         inputs:
         - content: bash linux_bench.sh
-  4core_c2linux:
-    before_run:
-    - primary
-    meta:
-      bitrise.io:
-        machine_type_id: c2-standard-4
-        stack: linux-docker-android-20.04
-  8core_c2linux:
-    before_run:
-    - primary
-    meta:
-      bitrise.io:
-        machine_type_id: c2-standard-8
-        stack: linux-docker-android-20.04
-  16core_c2linux:
-    before_run:
-    - primary
-    meta:
-      bitrise.io:
-        stack: linux-docker-android-20.04
-        machine_type_id: c2-standard-16
+        is_always_run: true
+app:
+  envs:
+  - opts:
+      is_expand: false
+    BITRISE_GIT_BRANCH: main
