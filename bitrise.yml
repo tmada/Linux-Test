@@ -100,7 +100,7 @@ workflows:
 
             [ "$OS" == "Darwin" ] && sysctl -n machdep.cpu.brand_string || cat /proc/cpuinfo | grep "model name"
 
-            [ "$OS" == "Darwin" ] && sysctl hw.ncpu
+            [ "$OS" == "Darwin" ] && sysctl hw.ncpu || getconf _NPROCESSORS_ONLN
 
             [ "$OS" == "Darwin" ] && xcodebuild -version
 
