@@ -95,6 +95,8 @@ workflows:
             date
 
             hostname
+            
+            uname -a
 
             [ "$OS" == "Darwin" ] && sw_vers || cat /etc/debian_version
 
