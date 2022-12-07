@@ -97,13 +97,13 @@ workflows:
             
             echo "$OS"
 
-            [ "$OS" == "Darwin" ] && sw_vers || cat /etc/debian_version
+            [ "$OS" != "Darwin" ] && cat /etc/debian_version || sw_vers
 
-            [ "$OS" == "Darwin" ] && sysctl -n machdep.cpu.brand_string || cat /proc/cpuinfo | grep "model name"
+            [ "$OS" != "Darwin" ] && cat /proc/cpuinfo | grep "model name" || sysctl -n machdep.cpu.brand_string
 
-            [ "$OS" == "Darwin" ] && sysctl hw.ncpu || getconf _NPROCESSORS_ONLN
+            [ "$OS" != "Darwin" ] && getconf _NPROCESSORS_ONLN || sysctl hw.ncpu
 
-            [ "$OS" == "Darwin" ] && xcodebuild -version
+            [ "$OS" != "Darwin" ] || xcodebuild -version
 
             echo "=="
     - script@1:
