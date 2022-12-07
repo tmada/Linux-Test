@@ -32,13 +32,17 @@ sysbench memory run --threads=$CPUS | grep "MiB transferred"
 #   echo "==MemBenchmark_MultiCore(4)"
 #   sysbench memory run --threads=4 | grep "MiB transferred"
 # fi
+echo "==FileIOBenchmark_SingleCoreCacheDriven"
+sysbench fileio prepare >/dev/null
+sysbench fileio run --threads=1 --file-test-mode=seqrewr | grep "written, MiB/s:"  # --max-time=300 --file-num=2 --file-total-size=128G
+sysbench fileio cleanup >/dev/null
 
 echo "==FileIOBenchmark_MultiCoreCacheDriven($CPUS)"
 #sysbench fileio prepare --file-total-size=128G --file-num=2 >/dev/null
 sysbench fileio prepare >/dev/null
 sysbench fileio run --threads=$CPUS --file-test-mode=seqrewr | grep "written, MiB/s:"  # --max-time=300 --file-num=2 --file-total-size=128G
-sysbench fileio cleanup >/dev/null
-sysbench fileio prepare >/dev/null
+# sysbench fileio cleanup >/dev/null
+# sysbench fileio prepare >/dev/null
 # if [[ "$(sysctl -n machdep.cpu.brand_string)" =~ "Apple M1 Max" ]]; then
 #   echo "==FileIOBenchmark_MultiCoreCacheDriven(8)"
 #   [ $CPUS -eq 10 ] && sysbench fileio run --threads=8 --file-test-mode=seqrewr | grep "written, MiB/s:" || echo "written, MiB/s:               0.0"
