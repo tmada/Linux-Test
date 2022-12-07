@@ -91,7 +91,7 @@ workflows:
 
 
             # write your script here
-            OS=$(uname -r)
+            OS=$(uname -s)
             date
 
             hostname
