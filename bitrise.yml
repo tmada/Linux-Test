@@ -91,12 +91,10 @@ workflows:
 
 
             # write your script here
-            OS=$(uname -a)
+            OS=$(uname -r)
             date
 
             hostname
-            
-            uname -a
 
             [ "$OS" == "Darwin" ] && sw_vers || cat /etc/debian_version
 
