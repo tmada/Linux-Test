@@ -14,6 +14,13 @@ workflows:
       bitrise.io:
         machine_type_id: g2-m1-max.10core
         stack: osx-xcode-14.0.x
+  5core_max:
+    before_run:
+    - primary
+    meta:
+      bitrise.io:
+        machine_type_id: g2-m1-max.5core
+        stack: osx-xcode-14.0.x
   12core_intel:
     before_run:
     - primary
@@ -88,7 +95,6 @@ workflows:
             a non-zero status, or zero if all commands exit successfully
 
             set -o pipefail
-
 
             # write your script here
             OS=$(uname -s)
