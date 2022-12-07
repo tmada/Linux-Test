@@ -92,7 +92,10 @@ workflows:
 
             # write your script here
             OS=$(uname -s)
+            
             date
+
+            echo $OS
 
             hostname
 
