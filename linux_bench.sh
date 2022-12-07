@@ -6,7 +6,7 @@ set -o pipefail
 # debug log
 # set -x
 OS=$( uname -a )
-[ "$OS" == "Darwin" ] && brew install sysbench >/dev/null || sudo apt-get -y install sysbench >/dev/null
+[ "$OS" == "Darwin" ] && brew install sysbench >/dev/null || { wget -qO - https://packagecloud.io/install/repositories/akopytov/sysbench/script.deb.sh | sudo bash ; sudo apt-get -y install sysbench >/dev/null ; } 
 [ "$OS" == "Darwin" ] && CPUS=$(sysctl -n hw.ncpu) || CPUS=$( nproc --all | awk '{print $2}' )
 MAX_PRIME=20000
 echo "==CPUBenchmark_SingleCore"
