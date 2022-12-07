@@ -5,7 +5,7 @@ set -e
 set -o pipefail
 # debug log
 # set -x
-OS=$( uname -a )
+OS=$( uname -r )
 [ "$OS" == "Darwin" ] && brew install sysbench >/dev/null || { wget -qO - https://packagecloud.io/install/repositories/akopytov/sysbench/script.deb.sh | sudo bash ; sudo apt-get -y install sysbench >/dev/null ; } 
 [ "$OS" == "Darwin" ] && CPUS=$(sysctl -n hw.ncpu) || CPUS=$( getconf _NPROCESSORS_ONLN )
 MAX_PRIME=20000
