@@ -98,7 +98,7 @@ workflows:
 
             [ "$OS" == "Darwin" ] && sw_vers || cat /etc/debian_version
 
-            [ "$OS" == "Darwin" ] && sysctl -n machdep.cpu.brand_string || cat /proc/cpuinfo
+            [ "$OS" == "Darwin" ] && sysctl -n machdep.cpu.brand_string || cat /proc/cpuinfo | grep "model name"
 
             [ "$OS" == "Darwin" ] && sysctl hw.ncpu
 
