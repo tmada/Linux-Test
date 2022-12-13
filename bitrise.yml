@@ -4,8 +4,8 @@ default_step_lib_source: 'https://github.com/bitrise-io/bitrise-steplib.git'
 project_type: other
 meta:
   bitrise.io:
-    stack: linux-docker-android-20.04
-    machine_type_id: standard
+    stack: osx-xcode-14.1.x-ventura
+    machine_type_id: g2-m1-max.10core
 workflows:
   10core_max:
     before_run:
