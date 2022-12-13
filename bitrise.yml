@@ -75,7 +75,7 @@ workflows:
     - primary
     meta:
       bitrise.io:
-        #machine_type_id: g2-m1.8core
+        machine_type_id: g2-m1.8core
         stack: osx-xcode-14.1.x-ventura
   primary:
     steps:
