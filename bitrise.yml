@@ -27,7 +27,7 @@ workflows:
     meta:
       bitrise.io:
         machine_type_id: g2.12core
-        stack: osx-xcode-14.0.x
+        stack: osx-xcode-14.1.x-ventura
   16core_c2linux:
     before_run:
     - primary
