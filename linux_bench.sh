@@ -22,10 +22,11 @@ sysbench cpu run --threads=$CPUS --cpu-max-prime=20000 --time=20 |grep "events p
 #   sysbench cpu run --threads=4 --cpu-max-prime=20000 --time=20 |grep "events per second:"
 # fi
 
-echo "==MemBenchmark_SingleCore"
-sysbench memory run --threads=1 | grep "MiB transferred"
-echo "==MemBenchmark_MultiCore($CPUS)"
-sysbench memory run --threads=$CPUS | grep "MiB transferred"
+# Seq write test
+echo "==MemBenchmark_SingleCoreWriteSequential"
+sysbench memory run --threads=1 --memory-block-size=1M --memory-total-size=1000G | grep "MiB transferred"
+echo "==MemBenchmark_MultiCoreWriteSequential($CPUS)"
+sysbench memory run --threads=$CPUS --memory-block-size=1M --memory-total-size=1000G | grep "MiB transferred"
 # if [[ "$(sysctl -n machdep.cpu.brand_string )" =~ "Apple M1 Max" ]]; then
 #   echo "==MemBenchmark_MultiCore(8)"
 #   [ $CPUS -eq 10 ] && sysbench memory run --threads=8 | grep "MiB transferred" || echo "0.0 MiB transferred (0.0 MiB/sec)"
