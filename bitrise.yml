@@ -49,6 +49,13 @@ workflows:
       bitrise.io:
         machine_type_id: g2.4core
         stack: osx-xcode-14.0.x
+  6core_intel:
+    before_run:
+    - primary
+    meta:
+      bitrise.io:
+        machine_type_id: g2.6core
+        stack: osx-xcode-14.0.x
   4core_m1:
     before_run:
     - primary
